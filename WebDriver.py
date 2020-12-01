@@ -12,7 +12,6 @@ class WebDriver:
   def __init__(self):
     self.chrome = webdriver.Chrome(ChromeDriverManager().install())
 
-
   def openBrowser(self, url):
     try:
       print("Requesting page: " + url)
@@ -49,7 +48,6 @@ class WebDriver:
     password_input.send_keys(password)
     print("Logging in")
     self.chrome.find_element_by_xpath("//input[@value='OTURUM AÇ']").click()
-    self.wait_until_visible(xpath="//a[@data-path='myAccount:greeting']")
 
     print("Successfully logged in")
 
