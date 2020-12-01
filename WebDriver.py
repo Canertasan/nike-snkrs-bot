@@ -48,30 +48,34 @@ class WebDriver:
     password_input.send_keys(password)
     print("Logging in")
     self.chrome.find_element_by_xpath("//input[@value='OTURUM AÇ']").click()
-
+    self.wait_until_visible(xpath="//span[@class='test-name text-color-secondary ml2-sm va-sm-m d-sm-h d-md-ib fs-block']")
     print("Successfully logged in")
 
   def waitTime(self, time):
+    is_it_first_run=True
     print("Waiting time...")
     while True:
       now = datetime.now()
-      if time <= now.hour:
+      if time <= now.hour and not is_it_first_run:
         self.chrome.refresh()
         break
+      elif time <= now.hour and is_it_first_run:
+        break
+      is_it_first_run = False
     print("Time arrived.")
   
   def selectItem(self):
     print("Selecting shoe number...")
     self.wait_until_clickable(xpath="//button[text()='EU 44']")
     self.chrome.find_element_by_xpath("//button[text()='EU 44']").click()
-    self.wait_until_clickable(xpath="//button[text()='Satın Al']")
-    self.chrome.find_element_by_xpath("//button[text()='Satın Al']").click()
+    self.wait_until_clickable(xpath="//button[text()[contains(.,'Satın Al')]])") # include
+    self.chrome.find_element_by_xpath("///button[text()[contains(.,'Satın Al')]])").click()
     print("Shoe number selected.")
 
   def payments(self, cvc):
     print("Paying for the shoe.")
-    self.wait_until_visible(xpath="//input[@class='cardCvc-input form-control ng-untouched ng-pristine ng-invalid']")
-    cvc_input = self.chrome.find_element_by_xpath("//input[@class='cardCvc-input form-control ng-untouched ng-pristine ng-invalid']")
+    self.wait_until_visible(xpath="//input[@name='cardCvc']")
+    cvc_input = self.chrome.find_element_by_xpath("//input[@name='cardCvc']")
     cvc_input.clear()
     cvc_input.send_keys(cvc)
     self.wait_until_clickable(xpath="//button[@class='button button-continue']")
