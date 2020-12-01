@@ -68,9 +68,8 @@ class WebDriver:
     print("Selecting shoe number...")
     self.wait_until_clickable(xpath="//button[text()='EU 44']")
     self.chrome.find_element_by_xpath("//button[text()='EU 44']").click()
-    # This buy button css may different fix this later.
-    self.wait_until_clickable(xpath="//button[@class='button cta-btn u-uppercase cta-btn ncss-btn text-color-white ncss-brand d-sm-b d-lg-ib pr5-sm pl5-sm pt3-sm pb3-sm d-sm-ib bg-black test-buyable buyable-full-width buyable-full-width'])")
-    self.chrome.find_element_by_xpath("//button[@class='button cta-btn u-uppercase cta-btn ncss-btn text-color-white ncss-brand d-sm-b d-lg-ib pr5-sm pl5-sm pt3-sm pb3-sm d-sm-ib bg-black test-buyable buyable-full-width buyable-full-width'])").click()
+    self.wait_until_clickable(xpath="//button[contains(text(),'Satın Al')]")
+    self.chrome.find_element_by_xpath("//button[contains(text(),'Satın Al')]").click()
     print("Shoe number selected.")
 
   def payments(self, cvc):
