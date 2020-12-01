@@ -11,7 +11,7 @@ from datetime import datetime
 from WebDriver import WebDriver 
 
 # Product Info
-PRODUCT_URL = "https://www.nike.com/tr/launch/t/womens-space-hippie-04-this-is-trash-iron-grey"
+PRODUCT_URL = "https://www.nike.com/tr/launch/t/sb-dunk-high-pro-invert"
 RELEASING_TIME = 14
 
 def getProduct(email, password, cvc):
