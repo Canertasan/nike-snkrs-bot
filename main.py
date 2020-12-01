@@ -27,15 +27,15 @@ def getProduct(email, password, cvc):
   # Select number and go basket
   driver.selectItem(SHOE_SIZE)
   # Payment
-  # driver.payments(cvc)
-
+  driver.payments(cvc)
   print("You are in line!")
+  time.sleep(10000) # Don't close browser
 
 
 if __name__ == '__main__':
   # we should read file for accounts, take email pw, cvc
   # add proxy
-  # open thread 20 times
+  # open 20 threads in the beginning
   email = "caner.tasan@hotmail.com"
   password = "159753Caner."
   cvc = "330"
