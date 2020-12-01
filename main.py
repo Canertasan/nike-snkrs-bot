@@ -11,7 +11,7 @@ from datetime import datetime
 from WebDriver import WebDriver 
 
 # Product Info
-PRODUCT_URL = "https://www.nike.com/tr/launch/t/sb-dunk-high-pro-invert"
+PRODUCT_URL = "https://www.nike.com/tr/launch/t/air-max-90-lux-bright-crimson"
 RELEASING_TIME = 14
 
 def getProduct(email, password, cvc):
@@ -26,7 +26,7 @@ def getProduct(email, password, cvc):
   # Select number and go basket
   driver.selectItem()
   # Payment
-  driver.payments(cvc)
+  # driver.payments(cvc)
 
   print("You are in line!")
 
