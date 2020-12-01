@@ -71,9 +71,9 @@ class WebDriver:
   def payments(self, cvc):
     print("Paying for the shoe.")
     self.wait_until_visible(xpath="//input[@class='cardCvc-input form-control ng-untouched ng-pristine ng-invalid']")
-    cvc = self.chrome.find_element_by_xpath("//input[@class='cardCvc-input form-control ng-untouched ng-pristine ng-invalid']")
-    cvc.clear()
-    cvc.send_keys(cvc)
+    cvc_input = self.chrome.find_element_by_xpath("//input[@class='cardCvc-input form-control ng-untouched ng-pristine ng-invalid']")
+    cvc_input.clear()
+    cvc_input.send_keys(cvc)
     self.wait_until_clickable(xpath="//button[@class='button button-continue']")
     self.chrome.find_element_by_xpath("//button[@class='button button-continue']").click()
     self.wait_until_clickable(xpath="//button[@class='button button-submit']")
