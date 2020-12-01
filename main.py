@@ -13,6 +13,7 @@ from WebDriver import WebDriver
 # Product Info
 PRODUCT_URL = "https://www.nike.com/tr/launch/t/air-max-90-lux-bright-crimson"
 RELEASING_TIME = 14
+SHOE_SIZE = "39"
 
 def getProduct(email, password, cvc):
   # Create a driver
@@ -24,7 +25,7 @@ def getProduct(email, password, cvc):
   # When time arrives run! 
   driver.waitTime(RELEASING_TIME)
   # Select number and go basket
-  driver.selectItem()
+  driver.selectItem(SHOE_SIZE)
   # Payment
   # driver.payments(cvc)
 

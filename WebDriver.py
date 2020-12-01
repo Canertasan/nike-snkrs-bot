@@ -64,10 +64,11 @@ class WebDriver:
       is_it_first_run = False
     print("Time arrived.")
   
-  def selectItem(self):
+  def selectItem(self, shoe_size):
+    path = "//button[text()='EU " + shoe_size + "']"
     print("Selecting shoe number...")
-    self.wait_until_clickable(xpath="//button[text()='EU 44']")
-    self.chrome.find_element_by_xpath("//button[text()='EU 44']").click()
+    self.wait_until_clickable(xpath=path)
+    self.chrome.find_element_by_xpath(path).click()
     self.wait_until_clickable(xpath="//button[contains(text(),'Satın Al')]")
     self.chrome.find_element_by_xpath("//button[contains(text(),'Satın Al')]").click()
     print("Shoe number selected.")
