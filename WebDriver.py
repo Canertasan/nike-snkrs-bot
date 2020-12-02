@@ -32,9 +32,10 @@ class WebDriver:
         WebDriverWait(self.chrome, duration, frequency).until(EC.element_to_be_clickable((By.CLASS_NAME, class_name)))
 
   def login(self, username, password):
-    print("Waiting for login button to become clickable")
-    self.wait_until_clickable(xpath="//button[text()='Katıl / Oturum Aç']")
-    self.chrome.find_element_by_xpath("//button[text()='Katıl / Oturum Aç']").click()
+    # If this is first login the you should uncomment those in below
+    # print("Waiting for login button to become clickable")
+    # self.wait_until_clickable(xpath="//button[text()='Katıl / Oturum Aç']")
+    # self.chrome.find_element_by_xpath("//button[text()='Katıl / Oturum Aç']").click()
 
     print("Waiting for login fields to become visible")
     self.wait_until_visible(xpath="//input[@name='emailAddress']")
@@ -68,15 +69,18 @@ class WebDriver:
     path = "//button[text()='EU " + shoe_size + "']"
     print("Selecting shoe number...")
     self.wait_until_clickable(xpath=path)
+    self.chrome.execute_script("scroll(0, 1000)") # for seeing buttons
     self.chrome.find_element_by_xpath(path).click()
-    self.wait_until_clickable(xpath="//button[contains(text(),'Satın Al')]")
-    self.chrome.find_element_by_xpath("//button[contains(text(),'Satın Al')]").click()
+    self.wait_until_clickable(xpath="//button[@class='ncss-btn-primary-dark btn-lg test']")
+    self.chrome.find_element_by_xpath("//button[@class='ncss-btn-primary-dark btn-lg test']").click()
     print("Shoe number selected.")
 
   def payments(self, cvc):
     print("Paying for the shoe.")
-    self.wait_until_visible(xpath="//input[@name='cardCvc']")
-    cvc_input = self.chrome.find_element_by_xpath("//input[@name='cardCvc']")
+    self.chrome.execute_script("scroll(0, 400)") # for seeing buttons
+    # Need class and name at the same time because it is inside in iframe
+    self.wait_until_visible(xpath="//input[@class='pre-search-input headline-5' and @name='cardCvc']")
+    cvc_input = self.chrome.find_element_by_xpath("//input[@class='pre-search-input headline-5' and @name='cardCvc']")
     cvc_input.clear()
     cvc_input.send_keys(cvc)
     self.wait_until_clickable(xpath="//button[@class='button button-continue']")

@@ -21,11 +21,13 @@ def getProduct(email, password, cvc):
   # Get product page
   driver.openBrowser(PRODUCT_URL)
   # Login while on the product page
-  driver.login(email, password)
+  # driver.login(email, password)  -> I am not sure first login is the best way.
   # When time arrives run! 
   driver.waitTime(RELEASING_TIME)
   # Select number and go basket
   driver.selectItem(SHOE_SIZE)
+  # after select shoe login
+  driver.login(email, password)  # Try after login!
   # Payment
   driver.payments(cvc)
   print("You are in line!")
