@@ -10,7 +10,11 @@ import sys
 
 class WebDriver:
   def __init__(self):
-    self.chrome = webdriver.Chrome(ChromeDriverManager().install())
+    options = webdriver.ChromeOptions() 
+    options.add_argument('window-size=1200x600')
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option('useAutomationExtension', False)
+    self.chrome = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 
   def openBrowser(self, url):
     try:
