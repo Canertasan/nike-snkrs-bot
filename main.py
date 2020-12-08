@@ -43,3 +43,26 @@ if __name__ == '__main__':
   cvc = "330"
   
   getProduct(email, password, cvc)
+
+#   I don't know why but i encounter this issue in only payment part. I execute script with other pages but i didn't get this error.
+
+#     def payments(self, cvc):
+#         print("Paying for the shoe.")
+#         self.chrome.execute_script("scroll(0, 300)") # for seeing buttons
+#         # Need class and name at the same time because it is inside in iframe
+#         self.wait_until_visible(xpath="//input[@class='pre-search-input headline-5' and @name='cardCvc']")
+#         cvc_input = self.chrome.find_element_by_xpath("//input[@class='pre-search-input headline-5' and @name='cardCvc']")
+#         cvc_input.clear()
+#         cvc_input.send_keys(cvc)
+#         self.wait_until_clickable(xpath="//button[@class='button button-continue']")
+#         self.chrome.find_element_by_xpath("//button[@class='button button-continue']").click()
+#         self.wait_until_clickable(xpath="//button[@class='button button-submit']")
+#         self.chrome.find_element_by_xpath("//button[@class='button button-submit']").click()
+#         print("Payment taken.")
+    
+# This is my code that does not running. Before that error I encountered with another error like this: `Refused to load the script 'http because it violates the following Content Security Policy directive with ChromeDriver Chrome headless Selenium.`
+
+# [I solved this error with this][1]: `self.chrome.execute_cdp_cmd("Page.setBypassCSP", {"enabled": True}) #  to disable Contect Security Policy`
+
+
+#   [1]: https://stackoverflow.com/questions/59207838/refused-to-load-the-script-because-it-violates-the-following-content-security-po

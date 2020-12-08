@@ -10,11 +10,16 @@ import sys
 
 class WebDriver:
   def __init__(self):
-    options = webdriver.ChromeOptions() 
-    options.add_argument('window-size=1200x600')
+    options = webdriver.ChromeOptions()
+    options.add_argument("--disable-web-security")
+    options.add_argument("--allow-running-insecure-content")
+    options.add_argument("start-maximized")
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
+    options.add_argument("user-agent=whatever you want")
+    options.add_argument("user-data-dri=/Users/caner/Library/Application Support/Google/Chrome/Default")
     self.chrome = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+    self.chrome.execute_cdp_cmd("Page.setBypassCSP", {"enabled": True}) #  to disable Contect Security Policy
 
   def openBrowser(self, url):
     try:
@@ -56,6 +61,7 @@ class WebDriver:
     self.wait_until_visible(xpath="//span[@class='test-name text-color-secondary ml2-sm va-sm-m d-sm-h d-md-ib fs-block']")
     print("Successfully logged in")
 
+  # pause.until(date_parser.parse(release_time))
   def waitTime(self, time):
     is_it_first_run=True
     print("Waiting time...")
@@ -68,8 +74,11 @@ class WebDriver:
         break
       is_it_first_run = False
     print("Time arrived.")
+
+    #The devicemotion events are blocked by feature policy. See https://github.com/WICG/feature-policy/blob/master/features.md#sensor-features
   
   def selectItem(self, shoe_size):
+    self.chrome.execute_script("scroll(0, 1000)") # for delete devicemotion
     path = "//button[text()='EU " + shoe_size + "']"
     print("Selecting shoe number...")
     self.wait_until_clickable(xpath=path)
@@ -81,7 +90,7 @@ class WebDriver:
 
   def payments(self, cvc):
     print("Paying for the shoe.")
-    self.chrome.execute_script("scroll(0, 400)") # for seeing buttons
+    self.chrome.execute_script("scroll(0, 300)") # for seeing buttons
     # Need class and name at the same time because it is inside in iframe
     self.wait_until_visible(xpath="//input[@class='pre-search-input headline-5' and @name='cardCvc']")
     cvc_input = self.chrome.find_element_by_xpath("//input[@class='pre-search-input headline-5' and @name='cardCvc']")
