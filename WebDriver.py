@@ -10,7 +10,7 @@ import sys
 
 class WebDriver:
   def __init__(self):
-    options = webdriver.ChromeOptions()
+    # options = webdriver.ChromeOptions()
     # options.add_argument("--disable-web-security")
     # options.add_argument("--allow-running-insecure-content")
     # options.add_argument("--incognito")
@@ -18,7 +18,7 @@ class WebDriver:
     # options.add_experimental_option('useAutomationExtension', False)
     # options.add_argument("user-agent=whatever you want")
     # options.add_argument("user-data-dir=/Users/caner/Library/Application Support/Google/Chrome")
-    self.chrome = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+    self.chrome = webdriver.Chrome(ChromeDriverManager().install())
 
   def openBrowser(self, url):
     try:
@@ -39,7 +39,7 @@ class WebDriver:
     elif class_name:
         WebDriverWait(self.chrome, duration, frequency).until(EC.element_to_be_clickable((By.CLASS_NAME, class_name)))
 
-  def wait_until_frame_to_be_available_and_switch_to_it(self, xpath=None, class_name=None, duration=10000, frequency=0.01)
+  def wait_until_frame_to_be_available_and_switch_to_it(self, xpath=None, class_name=None, duration=10000, frequency=0.01):
     if xpath:
       WebDriverWait(self.chrome, duration, frequency).until(EC.frame_to_be_available_and_switch_to_it((By.XPATH, xpath)))
     elif class_name:
