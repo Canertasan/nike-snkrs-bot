@@ -11,15 +11,14 @@ import sys
 class WebDriver:
   def __init__(self):
     options = webdriver.ChromeOptions()
-    options.add_argument("--disable-web-security")
-    options.add_argument("--allow-running-insecure-content")
-    options.add_argument("start-maximized")
-    options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    options.add_experimental_option('useAutomationExtension', False)
-    options.add_argument("user-agent=whatever you want")
-    options.add_argument("user-data-dri=/Users/caner/Library/Application Support/Google/Chrome/Default")
+    # options.add_argument("--disable-web-security")
+    # options.add_argument("--allow-running-insecure-content")
+    # options.add_argument("--incognito")
+    # options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    # options.add_experimental_option('useAutomationExtension', False)
+    # options.add_argument("user-agent=whatever you want")
+    # options.add_argument("user-data-dir=/Users/caner/Library/Application Support/Google/Chrome")
     self.chrome = webdriver.Chrome(ChromeDriverManager().install(), options=options)
-    self.chrome.execute_cdp_cmd("Page.setBypassCSP", {"enabled": True}) #  to disable Contect Security Policy
 
   def openBrowser(self, url):
     try:
@@ -39,6 +38,12 @@ class WebDriver:
         WebDriverWait(self.chrome, duration, frequency).until(EC.element_to_be_clickable((By.XPATH, xpath)))
     elif class_name:
         WebDriverWait(self.chrome, duration, frequency).until(EC.element_to_be_clickable((By.CLASS_NAME, class_name)))
+
+  def wait_until_frame_to_be_available_and_switch_to_it(self, xpath=None, class_name=None, duration=10000, frequency=0.01)
+    if xpath:
+      WebDriverWait(self.chrome, duration, frequency).until(EC.frame_to_be_available_and_switch_to_it((By.XPATH, xpath)))
+    elif class_name:
+      WebDriverWait(self.chrome, duration, frequency).until(EC.frame_to_be_available_and_switch_to_it((By.CLASS_NAME, class_name)))
 
   def login(self, username, password):
     # If this is first login the you should uncomment those in below
@@ -92,10 +97,17 @@ class WebDriver:
     print("Paying for the shoe.")
     self.chrome.execute_script("scroll(0, 300)") # for seeing buttons
     # Need class and name at the same time because it is inside in iframe
-    self.wait_until_visible(xpath="//input[@class='pre-search-input headline-5' and @name='cardCvc']")
-    cvc_input = self.chrome.find_element_by_xpath("//input[@class='pre-search-input headline-5' and @name='cardCvc']")
+    print("scroll is done waiting for the card")
+    self.wait_until_frame_to_be_available_and_switch_to_it(xpath="//iframe[@title='payment' and contains(@class, 'cvv')]")
+    print('iframe finded')
+    self.chrome.switch_to.frame(self.chrome.find_element_by_xpath("//iframe[@title='payment' and contains(@class, 'cvv')]"))
+    print("iframe switched")
+    self.wait_until_visible(xpath="//input[@name='cardCvc']")
+    print("CVC is visible")
+    cvc_input = self.chrome.find_element_by_xpath("//input[@name='cardCvc']")
     cvc_input.clear()
     cvc_input.send_keys(cvc)
+    print("CVC filled")
     self.wait_until_clickable(xpath="//button[@class='button button-continue']")
     self.chrome.find_element_by_xpath("//button[@class='button button-continue']").click()
     self.wait_until_clickable(xpath="//button[@class='button button-submit']")
