@@ -95,12 +95,13 @@ class WebDriver:
 
   def payments(self, cvc):
     print("Paying for the shoe.")
-    self.chrome.execute_script("scroll(0, 300)") # for seeing buttons
     # Need class and name at the same time because it is inside in iframe
-    print("scroll is done waiting for the card")
-    self.wait_until_frame_to_be_available_and_switch_to_it(xpath="//iframe[@title='payment' and contains(@class, 'cvv')]")
+    # self.wait_until_frame_to_be_available_and_switch_to_it(xpath="//iframe[@title='payment' and @_ngcontent-smj-c85='')]")
+    self.wait_until_frame_to_be_available_and_switch_to_it(xpath="//iframe[@class='cvv')]")
+    # iframes = self.chrome.find_element_by_tag_name("iframe")
     print('iframe finded')
-    self.chrome.switch_to.frame(self.chrome.find_element_by_xpath("//iframe[@title='payment' and contains(@class, 'cvv')]"))
+    self.chrome.switch_to.frame(self.chrome.find_element_by_xpath("//iframe[@class='cvv')]"))
+    # self.chrome.switch_to.frame(iframes[1])
     print("iframe switched")
     self.wait_until_visible(xpath="//input[@name='cardCvc']")
     print("CVC is visible")
@@ -108,6 +109,10 @@ class WebDriver:
     cvc_input.clear()
     cvc_input.send_keys(cvc)
     print("CVC filled")
+    self.chrome.switch_to.default_content()
+    print("switch default content")
+    self.chrome.execute_script("scroll(0, 300)") # for seeing buttons
+    print("scroll is done clicking buttons.")
     self.wait_until_clickable(xpath="//button[@class='button button-continue']")
     self.chrome.find_element_by_xpath("//button[@class='button button-continue']").click()
     self.wait_until_clickable(xpath="//button[@class='button button-submit']")
