@@ -10,14 +10,6 @@ import sys
 
 class WebDriver:
   def __init__(self):
-    # options = webdriver.ChromeOptions()
-    # options.add_argument("--disable-web-security")
-    # options.add_argument("--allow-running-insecure-content")
-    # options.add_argument("--incognito")
-    # options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    # options.add_experimental_option('useAutomationExtension', False)
-    # options.add_argument("user-agent=whatever you want")
-    # options.add_argument("user-data-dir=/Users/caner/Library/Application Support/Google/Chrome")
     self.chrome = webdriver.Chrome(ChromeDriverManager().install())
 
   def openBrowser(self, url):
@@ -46,11 +38,6 @@ class WebDriver:
       WebDriverWait(self.chrome, duration, frequency).until(EC.frame_to_be_available_and_switch_to_it((By.CLASS_NAME, class_name)))
 
   def login(self, username, password):
-    # If this is first login the you should uncomment those in below
-    # print("Waiting for login button to become clickable")
-    # self.wait_until_clickable(xpath="//button[text()='Katıl / Oturum Aç']")
-    # self.chrome.find_element_by_xpath("//button[text()='Katıl / Oturum Aç']").click()
-
     print("Waiting for login fields to become visible")
     self.wait_until_visible(xpath="//input[@name='emailAddress']")
 
@@ -96,12 +83,10 @@ class WebDriver:
   def payments(self, cvc):
     print("Paying for the shoe.")
     # Need class and name at the same time because it is inside in iframe
-    # self.wait_until_frame_to_be_available_and_switch_to_it(xpath="//iframe[@title='payment' and @_ngcontent-smj-c85='')]")
-    self.wait_until_frame_to_be_available_and_switch_to_it(xpath="//iframe[@class='cvv')]")
-    # iframes = self.chrome.find_element_by_tag_name("iframe")
+    self.wait_until_visible(xpath="//iframe[@title='payment' and @class='cvv']")
     print('iframe finded')
-    self.chrome.switch_to.frame(self.chrome.find_element_by_xpath("//iframe[@class='cvv')]"))
-    # self.chrome.switch_to.frame(iframes[1])
+    iframe = self.chrome.find_element_by_xpath("//iframe[@title='payment' and @class='cvv']")
+    self.chrome.switch_to.frame(iframe)
     print("iframe switched")
     self.wait_until_visible(xpath="//input[@name='cardCvc']")
     print("CVC is visible")
@@ -113,10 +98,11 @@ class WebDriver:
     print("switch default content")
     self.chrome.execute_script("scroll(0, 300)") # for seeing buttons
     print("scroll is done clicking buttons.")
-    self.wait_until_clickable(xpath="//button[@class='button button-continue']")
-    self.chrome.find_element_by_xpath("//button[@class='button button-continue']").click()
-    self.wait_until_clickable(xpath="//button[@class='button button-submit']")
-    self.chrome.find_element_by_xpath("//button[@class='button button-submit']").click()
+    self.wait_until_clickable(xpath="//button[@class='button-continue']")
+    self.chrome.find_element_by_xpath("//button[@class='button-continue']").click()
+    print("button clicked")
+    self.wait_until_clickable(xpath="//button[@class='button-submit']")
+    self.chrome.find_element_by_xpath("//button[@class='button-submit']").click()
     print("Payment taken.")
 
 
