@@ -66,8 +66,6 @@ class WebDriver:
         break
       is_it_first_run = False
     print("Time arrived.")
-
-    #The devicemotion events are blocked by feature policy. See https://github.com/WICG/feature-policy/blob/master/features.md#sensor-features
   
   def selectItem(self, shoe_size):
     self.chrome.execute_script("scroll(0, 1000)") # for delete devicemotion
@@ -80,7 +78,7 @@ class WebDriver:
     self.chrome.find_element_by_xpath("//button[@class='ncss-btn-primary-dark btn-lg test']").click()
     print("Shoe number selected.")
 
-  def payments(self, cvc):
+  async def payments(self, cvc):
     print("Paying for the shoe.")
     # Need class and name at the same time because it is inside in iframe
     self.wait_until_visible(xpath="//iframe[@title='payment' and @class='cvv']")
@@ -98,11 +96,14 @@ class WebDriver:
     print("switch default content")
     self.chrome.execute_script("scroll(0, 300)") # for seeing buttons
     print("scroll is done clicking buttons.")
-    self.wait_until_clickable(xpath="//button[@class='button-continue']")
-    self.chrome.find_element_by_xpath("//button[@class='button-continue']").click()
+    self.wait_until_clickable(xpath="//button[@type='button' and @class='button-continue']")
+    self.chrome.find_element_by_xpath("//button[@type='button' and @class='button-continue']").click()
+    time.sleep(1)
     print("button clicked")
-    self.wait_until_clickable(xpath="//button[@class='button-submit']")
-    self.chrome.find_element_by_xpath("//button[@class='button-submit']").click()
+    self.wait_until_clickable(xpath="//button[@class='button-submit'][.=' Siparişi Gönder ']")
+    self.chrome.find_element_by_xpath("//button[@class='button-submit'][.=' Siparişi Gönder ']").click()
+    # self.wait_until_clickable(xpath="//button[@id='testButton' and @class='button-return']")  # test / Alisverise devam et button
+    # self.chrome.find_element_by_xpath("//button[@id='testButton' and @class='button-return']").click()
     print("Payment taken.")
 
 
