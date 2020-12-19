@@ -9,13 +9,13 @@ import sys
 import time
 from datetime import datetime
 from WebDriver import WebDriver 
+import multiprocessing
 
 # Product Info
-PRODUCT_URL = "https://www.nike.com/tr/launch/t/air-jordan-1-dark-mocha3"
+PRODUCT_URL = "https://www.nike.com/tr/launch/t/air-max-1-yours/"
 RELEASING_TIME = 14
-SHOE_SIZE = "44"
 
-def getProduct(email, password, cvc):
+def getProduct(email, password, cvc, shoe_size):
   # Create a driver
   driver = WebDriver()
   # Get product page
@@ -23,7 +23,7 @@ def getProduct(email, password, cvc):
   # When time arrives run! 
   driver.waitTime(RELEASING_TIME)
   # Select number and go basket
-  driver.selectItem(SHOE_SIZE)
+  driver.selectItem(shoe_size)
   # after select shoe login
   driver.login(email, password)
   # Payment
@@ -31,14 +31,14 @@ def getProduct(email, password, cvc):
   print("You are in line!")
   time.sleep(10000) # Don't close browser
 
-
 if __name__ == '__main__':
   # we should read file for accounts, take email pw, cvc
   # add proxy
   # open 20 threads in the beginning
-  email = "caner.tasan@hotmail.com"
-  # email = "canertasan@sabanciuniv.edu"
-  password = "159753Caner."
+  shoe_size = "44"
   cvc = "330"
-  
-  getProduct(email, password, cvc)
+  password = "159753Caner."
+  p1 = multiprocessing.Process(target=getProduct, args=("caner.tasan@hotmail.com",password, cvc, shoe_size,))
+  p2 = multiprocessing.Process(target=getProduct, args=("canertasan@sabanciuniv.edu",password, cvc, shoe_size,))
+  p1.start() # starting workers
+  p2.start() # starting workers

@@ -78,7 +78,7 @@ class WebDriver:
     self.chrome.find_element_by_xpath("//button[@class='ncss-btn-primary-dark btn-lg test']").click()
     print("Shoe number selected.")
 
-  async def payments(self, cvc):
+  def payments(self, cvc):
     print("Paying for the shoe.")
     # Need class and name at the same time because it is inside in iframe
     self.wait_until_visible(xpath="//iframe[@title='payment' and @class='cvv']")
@@ -100,107 +100,5 @@ class WebDriver:
     self.chrome.find_element_by_xpath("//button[@type='button' and @class='button-continue']").click()
     time.sleep(1)
     print("button clicked")
-    self.wait_until_clickable(xpath="//button[@class='button-submit'][.=' Siparişi Gönder ']")
-    self.chrome.find_element_by_xpath("//button[@class='button-submit'][.=' Siparişi Gönder ']").click()
-    # self.wait_until_clickable(xpath="//button[@id='testButton' and @class='button-return']")  # test / Alisverise devam et button
-    # self.chrome.find_element_by_xpath("//button[@id='testButton' and @class='button-return']").click()
+    self.chrome.find_element_by_class_name('button-submit').click() #submit
     print("Payment taken.")
-
-
-############ Thread Example ############# 
-# from threading import Thread, Lock
-
-# mutex = Lock()
-# reached = False
-
-
-# def runProcess(self):
-#     # Make the tests...
-#     check = True
-#     global reached
-#     while check:
-#         try:
-#             if reached:
-#                 self.chrome.close()
-#                 return
-#             self.chrome.execute_script("""
-#             let btn = Array.from(document.querySelectorAll('button.size-grid-dropdown.size-grid-button')).find(el => el.textContent === 'EU 44');
-#             btn.click();
-#             let btnPayment = document.querySelector("button.cta-btn.u-uppercase.cta-btn.ncss-btn.text-color-white.ncss-brand.d-sm-b.d-lg-ib.pr5-sm.pl5-sm.pt3-sm.pb3-sm.d-sm-ib.bg-black.test-buyable.buyable-full-width.buyable-full-width");
-#             btnPayment.click();
-#             """)
-#             # finish in here
-#             check = False
-#         except Exception as ex:
-#             time.sleep(0.5)
-#             self.chrome.refresh()
-#             ex_type, ex_value, ex_traceback = sys.exc_info()
-#             print("Exception message : %s - hala 1. aşamayi gecemedi" % ex_value)
-
-#     check = True
-#     while check:
-#         try:
-#             if reached:
-#                 self.chrome.close()
-#                 return
-#             self.chrome.execute_script("""
-#                 let setInputtedVar = document.querySelector("input#cardCvc-input.form-control.ng-untouched.ng-pristine.ng-invalid")
-#                 setInputtedVar.value = "330"
-#                 let btn = document.querySelector("button.button-continue")
-#                 btn.click()
-#                 let btnSubmit = document.querySelector("button.button-submit")
-#                 btnSubmit.click()""")
-#             # finish in here
-#             check = False
-#             mutex.acquire()
-#             reached = True
-#             mutex.release()
-#             print("REACHED")
-#             self.chrome.maximize_window()
-#         except Exception as ex:
-#             time.sleep(0.25)
-#             ex_type, ex_value, ex_traceback = sys.exc_info()
-#             print("Exception message : %s - hala 2. aşamayi gecemedi" % ex_value)
-
-
-# exitFlag = 0
-
-
-# class myThread (Thread):
-#     def _init_(self, threadID, name, counter, arg):
-#         Thread._init_(self)
-#         self.threadID = threadID
-#         self.name = name
-#         self.counter = counter
-#         options = Options()
-#         options.add_argument(arg)
-#         self.chrome = webdriver.Chrome(
-#             executable_path="C:/Users/Caner.Tasan/Desktop/scriptTrial/chromedriver83.exe", options=options)
-#         # self.chrome.get('https://www.nike.com/tr/launch')
-
-#     def run(self):
-#         self.chrome.get(
-#             'https://www.nike.com/tr/launch/t/air-max-90-pink-foam')
-#         print("Starting " + self.name)
-#         runProcess(self)
-#         print("Exiting " + self.name)
-
-
-# # Create new threads
-# thread1 = myThread(
-#     1, "Thread-1", 1, "user-data-dir=C:/Users/Caner.Tasan/AppData/Local/Google/Chrome/User Data1/")
-# thread2 = myThread(
-#     2, "Thread-2", 2, "user-data-dir=C:/Users/Caner.Tasan/AppData/Local/Google/Chrome/User Data2/")
-# thread3 = myThread(
-#     3, "Thread-3", 3, "user-data-dir=C:/Users/Caner.Tasan/AppData/Local/Google/Chrome/User Data3/")
-# thread4 = myThread(
-#     4, "Thread-4", 4, "user-data-dir=C:/Users/Caner.Tasan/AppData/Local/Google/Chrome/User Data4/")
-
-# # Start new Threads
-# thread1.start()
-# time.sleep(0.35)
-# thread2.start()
-# time.sleep(0.35)
-# thread3.start()
-# time.sleep(0.35)
-# thread4.start()
