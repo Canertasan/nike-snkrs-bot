@@ -37,7 +37,25 @@ if __name__ == '__main__':
   shoe_size = "44"
   cvc = "330"
   password = "159753Caner."
+  password2 = "654321Ops"
+  # define multiprocessings
   p1 = multiprocessing.Process(target=getProduct, args=("caner.tasan@hotmail.com",password, cvc, shoe_size,))
   p2 = multiprocessing.Process(target=getProduct, args=("canertasan@sabanciuniv.edu",password, cvc, shoe_size,))
-  p1.start() # starting workers
-  p2.start() # starting workers
+  p3 = multiprocessing.Process(target=getProduct, args=("huseyintasan37@gmail.com",password, cvc, shoe_size,))  # does this payment method added save my credit cart?
+  #  NEED TO PREPARE CREDIT CARTS
+  # p4 = multiprocessing.Process(target=getProduct, args=("gulerman36@hotmail.com",password, cvc, shoe_size,))
+  # p5 = multiprocessing.Process(target=getProduct, args=("kaansakarca123@hotmail.com",password2, cvc, shoe_size,))
+  # p6 = multiprocessing.Process(target=getProduct, args=("jalesakarca@hotmail.com",password2, cvc, shoe_size,))
+  # p7 = multiprocessing.Process(target=getProduct, args=("resellkc@hotmail.com",password2, cvc, shoe_size,))
+  # p8 = multiprocessing.Process(target=getProduct, args=("kaansakarca888@gmail.com",password2, cvc, shoe_size,))
+  # p9 = multiprocessing.Process(target=getProduct, args=("k.sakarca@gmail.com",password2, cvc, shoe_size,))
+  # starting workers
+  p1.start()
+  p2.start()
+  p3.start()
+  # p4.start()
+  # p5.start()
+  # p6.start()
+  # p7.start()
+  # p8.start()
+  # p9.start() 
