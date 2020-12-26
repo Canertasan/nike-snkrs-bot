@@ -12,7 +12,7 @@ from WebDriver import WebDriver
 import multiprocessing
 
 # Product Info
-PRODUCT_URL = "https://www.nike.com/tr/launch/t/air-max-1-yours/"
+PRODUCT_URL = "https://www.nike.com/tr/launch/t/kobe-6-protro-green-apple"
 RELEASING_TIME = 14
 
 def getProduct(email, password, cvc, shoe_size):
@@ -32,9 +32,8 @@ def getProduct(email, password, cvc, shoe_size):
   time.sleep(10000) # Don't close browser
 
 if __name__ == '__main__':
-  # we should read file for accounts, take email pw, cvc
-  # add proxy
-  # open 20 threads in the beginning
+  # we should read file for accounts, take email pw, cvc  Yes we should but try first 20 account without reading csv, see result.
+  # add proxy do we need proxy?
   shoe_size = "44"
   cvc = "330"
   password = "159753Caner."
