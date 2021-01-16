@@ -15,9 +15,9 @@ import multiprocessing
 PRODUCT_URL = "https://www.nike.com/tr/launch/t/air-jordan-1-volt-gold1"
 RELEASING_TIME = 14
 
-def getProduct(email, password, cvc, shoe_size):
+def getProduct(email, password, cvc, shoe_size, proxy):
   # Create a driver
-  driver = WebDriver()
+  driver = WebDriver(proxy)
   # Get product page
   driver.openBrowser(PRODUCT_URL)
   # When time arrives run! 
@@ -40,12 +40,12 @@ if __name__ == '__main__':
   password = "159753Caner."
   password2 = "654321Ops"
   # define multiprocessings
-  p1 = multiprocessing.Process(target=getProduct, args=("caner.tasan@hotmail.com",password, cvc, shoe_size,))
+  p1 = multiprocessing.Process(target=getProduct, args=("caner.tasan@hotmail.com",password, cvc, shoe_size, "103.146.176.124:80"))
   # p2 = multiprocessing.Process(target=getProduct, args=("canertasan@sabanciuniv.edu",password, cvc, shoe_size,))
-  p3 = multiprocessing.Process(target=getProduct, args=("gulerman36@hotmail.com",password, cvc, shoe_size,))  # does this payment method added save my credit cart?
-  p4 = multiprocessing.Process(target=getProduct, args=("kaansakarca123@hotmail.com",password2, cvc, shoe_size2,))
-  p5 = multiprocessing.Process(target=getProduct, args=("resellkc@hotmail.com",password2, cvc, shoe_size2,))
-  p6 = multiprocessing.Process(target=getProduct, args=("k.sakarca@gmail.com",password2, cvc, shoe_size2,))
+  p3 = multiprocessing.Process(target=getProduct, args=("gulerman36@hotmail.com",password, cvc, shoe_size, "173.46.67.172:58517"))  # does this payment method added save my credit cart?
+  p4 = multiprocessing.Process(target=getProduct, args=("kaansakarca123@hotmail.com",password2, cvc, shoe_size2, "43.224.10.42:6666"))
+  p5 = multiprocessing.Process(target=getProduct, args=("resellkc@hotmail.com",password2, cvc, shoe_size2, "37.49.127.231:8080"))
+  p6 = multiprocessing.Process(target=getProduct, args=("k.sakarca@gmail.com",password2, cvc, shoe_size2, "37.49.127.238:8080"))
   # p7 = multiprocessing.Process(target=getProduct, args=("resellkc@hotmail.com",password2, cvc, shoe_size,))
   # p8 = multiprocessing.Process(target=getProduct, args=("kaansakarca888@gmail.com",password2, cvc, shoe_size,))
   # p9 = multiprocessing.Process(target=getProduct, args=("k.sakarca@gmail.com",password2, cvc, shoe_size,))
