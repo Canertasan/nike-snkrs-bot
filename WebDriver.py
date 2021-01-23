@@ -8,21 +8,7 @@ from datetime import datetime
 import time
 import sys
 class WebDriver:
-  def __init__(self, proxy):
-    # options = webdriver.ChromeOptions()
-    # user_agent = 'Mozilla/5.0 CK={} (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko'
-    # webdriver.DesiredCapabilities.CHROME['proxy'] = {
-    #   "httpProxy": proxy,
-    #   "ftpProxy": proxy,
-    #   "sslProxy": proxy,
-    #   "proxyType": "MANUAL",
-    # }
-    # options.add_argument("user-agent="+user_agent)
-    # options.add_argument('--proxy-server=%s' % proxy)
-    # webdriver.DesiredCapabilities.CHROME['acceptSslCerts']=True
-    # print(webdriver.DesiredCapabilities.CHROME)
-    # self.chrome = webdriver.Chrome(ChromeDriverManager().install(), options=options)
-    # TRY FIRST WITHOUT PROXY
+  def __init__(self):
     self.chrome = webdriver.Chrome(ChromeDriverManager().install())
 
 
