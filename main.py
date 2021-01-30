@@ -12,14 +12,13 @@ from WebDriver import WebDriver
 import multiprocessing
 
 # Product Info
-PRODUCT_URL = "https://www.nike.com/tr/launch/t/sb-dunk-low-pro-court-purple1"
 RELEASING_TIME = 14
 
-def getProduct(email, password, cvc, shoe_size, proxy):
+def getProduct(email, password, cvc, shoe_size, url):
   # Create a driver
-  driver = WebDriver(proxy)
+  driver = WebDriver()
   # Get product page
-  driver.openBrowser(PRODUCT_URL)
+  driver.openBrowser(url)
   # When time arrives run! 
   driver.waitTime(RELEASING_TIME)
   # Select number and go basket
@@ -36,22 +35,33 @@ if __name__ == '__main__':
   password = "159753Caner."
   password2 = "654321Ops"
   # define multiprocessings
-  p1 = multiprocessing.Process(target=getProduct, args=("caner.tasan@hotmail.com",password, cvc, "44"))
-  p2 = multiprocessing.Process(target=getProduct, args=("canertasan@sabanciuniv.edu",password, cvc, "43"))
-  p3 = multiprocessing.Process(target=getProduct, args=("gulerman36@hotmail.com",password, cvc, "42"))
-  p4 = multiprocessing.Process(target=getProduct, args=("kaansakarca123@hotmail.com",password2, cvc, "41"))
-  p5 = multiprocessing.Process(target=getProduct, args=("resellkc@hotmail.com",password2, cvc, "40.5"))
-  p6 = multiprocessing.Process(target=getProduct, args=("k.sakarca@gmail.com",password2, cvc, "44.5",))
-  p7 = multiprocessing.Process(target=getProduct, args=("huseyintasan37@gmail.com",password, cvc, "45")) # add payment method
-  # p8 = multiprocessing.Process(target=getProduct, args=("kaansakarca888@gmail.com",password2, cvc, shoe_size,))  # reset password and add phone number
-  # p9 = multiprocessing.Process(target=getProduct, args=("jalesakarca@hotmail.com",password2, cvc, shoe_size2,))  # add phone number and add payment method
-  # starting workers
-  p1.start()
-  p2.start()
-  p3.start()
-  p4.start()
-  p5.start()
-  p6.start()
-  p7.start()
-  # p8.start()
-  # p9.start() 
+  PRODUCT_URL_1 = "https://www.nike.com/tr/launch/t/dunk-high-ambush-cosmic-fuchsia"
+  multiprocessing.Process(target=getProduct, args=("caner.tasan@hotmail.com",password, cvc, "38",PRODUCT_URL_1)).start()
+  multiprocessing.Process(target=getProduct, args=("canertasan@sabanciuniv.edu",password, cvc, "38.5",PRODUCT_URL_1)).start()
+  multiprocessing.Process(target=getProduct, args=("gulerman36@hotmail.com",password, cvc, "38",PRODUCT_URL_1)).start()
+  multiprocessing.Process(target=getProduct, args=("kaansakarca123@hotmail.com",password2, cvc, "39",PRODUCT_URL_1)).start()
+  multiprocessing.Process(target=getProduct, args=("resellkc@hotmail.com",password2, cvc, "38",PRODUCT_URL_1)).start()
+  multiprocessing.Process(target=getProduct, args=("k.sakarca@gmail.com",password2, cvc, "39",PRODUCT_URL_1)).start()
+  multiprocessing.Process(target=getProduct, args=("huseyintasan37@gmail.com",password, cvc, "38.5",PRODUCT_URL_1)).start()
+  multiprocessing.Process(target=getProduct, args=("jalesakarca@hotmail.com",password2, cvc, "38.5",PRODUCT_URL_1)).start()
+
+  # PRODUCT_URL_2 = "https://www.nike.com/tr/launch/t/womens-dunk-low-disrupt-copa"
+  # multiprocessing.Process(target=getProduct, args=("caner.tasan@hotmail.com",password, cvc, "44",PRODUCT_URL_2)).start()
+  # multiprocessing.Process(target=getProduct, args=("canertasan@sabanciuniv.edu",password, cvc, "44.5",PRODUCT_URL_2)).start()
+  # multiprocessing.Process(target=getProduct, args=("gulerman36@hotmail.com",password, cvc, "45",PRODUCT_URL_2)).start()
+  # multiprocessing.Process(target=getProduct, args=("kaansakarca123@hotmail.com",password2, cvc, "40.5",PRODUCT_URL_2)).start()
+  # multiprocessing.Process(target=getProduct, args=("resellkc@hotmail.com",password2, cvc, "40.5",PRODUCT_URL_2)).start()
+  # multiprocessing.Process(target=getProduct, args=("k.sakarca@gmail.com",password2, cvc, "44",PRODUCT_URL_2)).start()
+  # multiprocessing.Process(target=getProduct, args=("huseyintasan37@gmail.com",password, cvc, "43",PRODUCT_URL_2)).start()
+  # multiprocessing.Process(target=getProduct, args=("jalesakarca@hotmail.com",password2, cvc, "44.5",PRODUCT_URL_2)).start()
+
+  # PRODUCT_URL_3 = "https://www.nike.com/tr/launch/t/womens-dunk-low-disrupt-copa"
+  # multiprocessing.Process(target=getProduct, args=("caner.tasan@hotmail.com",password, cvc, "44",PRODUCT_URL_3)).start()
+  # multiprocessing.Process(target=getProduct, args=("canertasan@sabanciuniv.edu",password, cvc, "44.5",PRODUCT_URL_3)).start()
+  # multiprocessing.Process(target=getProduct, args=("gulerman36@hotmail.com",password, cvc, "45",PRODUCT_URL_3)).start()
+  # multiprocessing.Process(target=getProduct, args=("kaansakarca123@hotmail.com",password2, cvc, "40.5",PRODUCT_URL_3)).start()
+  # multiprocessing.Process(target=getProduct, args=("resellkc@hotmail.com",password2, cvc, "40.5",PRODUCT_URL_3)).start()
+  # multiprocessing.Process(target=getProduct, args=("k.sakarca@gmail.com",password2, cvc, "44",PRODUCT_URL_3)).start()
+  # multiprocessing.Process(target=getProduct, args=("huseyintasan37@gmail.com",password, cvc, "43",PRODUCT_URL_3)).start()
+  # multiprocessing.Process(target=getProduct, args=("jalesakarca@hotmail.com",password2, cvc, "44.5",PRODUCT_URL_3)).start()
+
