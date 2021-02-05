@@ -35,8 +35,9 @@ if __name__ == '__main__':
   password = "159753Caner."
   password2 = "654321Ops"
   # define multiprocessings
-  PRODUCT_URL_1 = "https://www.nike.com/tr/launch/t/dunk-high-ambush-cosmic-fuchsia"
-  multiprocessing.Process(target=getProduct, args=("caner.tasan@hotmail.com",password, cvc, "38",PRODUCT_URL_1)).start()
+  # try this
+  PRODUCT_URL_1 = "https://www.nike.com/tr/launch/t/womens-air-jordan-1-zoom-pink-glaze"
+  # multiprocessing.Process(target=getProduct, args=("caner.tasan@hotmail.com",password, cvc, "38",PRODUCT_URL_1)).start()
   multiprocessing.Process(target=getProduct, args=("canertasan@sabanciuniv.edu",password, cvc, "38.5",PRODUCT_URL_1)).start()
   multiprocessing.Process(target=getProduct, args=("gulerman36@hotmail.com",password, cvc, "38",PRODUCT_URL_1)).start()
   multiprocessing.Process(target=getProduct, args=("kaansakarca123@hotmail.com",password2, cvc, "39",PRODUCT_URL_1)).start()
