@@ -7,26 +7,84 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from datetime import datetime
 import time
-import sys
+import zipfile
 class WebDriver:
-  def __init__(self):
+  def __init__(self, proxy_host,proxy_port,proxy_username,proxy_pw,order):
     options = Options()
-    # options.add_argument('--headless')
-    # options.add_argument('--disable-gpu')
-    prefs = {'profile.default_content_setting_values': {'cookies': 2, 'images': 2, 'javascript': 2, 
-                            'plugins': 2, 'popups': 2, 'geolocation': 2, 
-                            'notifications': 2, 'auto_select_certificate': 2, 'fullscreen': 2, 
-                            'mouselock': 2, 'mixed_script': 2, 'media_stream': 2, 
-                            'media_stream_mic': 2, 'media_stream_camera': 2, 'protocol_handlers': 2, 
-                            'ppapi_broker': 2, 'automatic_downloads': 2, 'midi_sysex': 2, 
-                            'push_messaging': 2, 'ssl_cert_decisions': 2, 'metro_switch_to_desktop': 2, 
-                            'protected_media_identifier': 2, 'app_banner': 2, 'site_engagement': 2, 
-                            'durable_storage': 2}}
-    options.add_experimental_option('prefs', prefs)
+    PROXY_HOST = proxy_host # rotating proxy
+    PROXY_PORT = proxy_port
+    PROXY_USER = proxy_username
+    PROXY_PASS = proxy_pw
+
+
+    manifest_json = """
+    {
+        "version": "1.0.0",
+        "manifest_version": 2,
+        "name": "Chrome Proxy",
+        "permissions": [
+            "proxy",
+            "tabs",
+            "unlimitedStorage",
+            "storage",
+            "<all_urls>",
+            "webRequest",
+            "webRequestBlocking"
+        ],
+        "background": {
+            "scripts": ["background.js"]
+        },
+        "minimum_chrome_version":"22.0.0"
+    }
+    """
+
+    background_js = """
+    var config = {
+            mode: "fixed_servers",
+            rules: {
+              singleProxy: {
+                scheme: "http",
+                host: "%s",
+                port: parseInt(%s)
+              },
+              bypassList: ["localhost"]
+            }
+          };
+
+    chrome.proxy.settings.set({value: config, scope: "regular"}, function() {});
+
+    function callbackFn(details) {
+        return {
+            authCredentials: {
+                username: "%s",
+                password: "%s"
+            }
+        };
+    }
+
+    chrome.webRequest.onAuthRequired.addListener(
+                callbackFn,
+                {urls: ["<all_urls>"]},
+                ['blocking']
+    );
+    """ % (PROXY_HOST, PROXY_PORT, PROXY_USER, PROXY_PASS)
+
+    pluginfile = 'proxy_auth_plugin_%s.zip' % order
+
+    with zipfile.ZipFile(pluginfile, 'w') as zp:
+        zp.writestr("manifest.json", manifest_json)
+        zp.writestr("background.js", background_js)
+    options.add_extension(pluginfile)
+
+    # options.add_argument('--headless') # how to find element with headless and how to authenticate with headless to proxy
+    # options.add_argument('--disable-gpu') # this is coming with headless
     options.add_argument("disable-infobars")
-    options.add_argument("--disable-extensions")
     self.chrome = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 
+  def accept_terms(self):
+    self.wait_until_visible(xpath="//button[@class='ncss-btn-primary-dark']",duration=30)
+    accept_button = self.chrome.find_element_by_xpath("//button[@class='ncss-btn-primary-dark']")
+    accept_button.click()
 
   def openBrowser(self, url):
     try:
@@ -115,6 +173,6 @@ class WebDriver:
     self.wait_until_clickable(xpath="//button[@type='button' and @class='button-continue']")
     self.chrome.find_element_by_xpath("//button[@type='button' and @class='button-continue']").click()
     time.sleep(1)
-    print("button clicked")
-    self.chrome.find_element_by_class_name('button-submit').click() #submit
-    print("Payment taken.")
+    # print("button clicked")
+    # self.chrome.find_element_by_class_name('button-submit').click() #submit
+    # print("Payment taken.")

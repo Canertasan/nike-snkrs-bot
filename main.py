@@ -14,12 +14,14 @@ import multiprocessing
 # Product Info
 RELEASING_TIME = 14
 
-def getProduct(email, password, cvc, shoe_size, url):
+def getProduct(email, password, cvc, shoe_size, url, proxy_host, proxy_port, proxy_username, proxy_password, order):
   # Create a driver
-  driver = WebDriver()
+  driver = WebDriver(proxy_host, proxy_port ,proxy_username, proxy_password, order)
   # Get product page
   driver.openBrowser(url)
-  # When time arrives run! 
+  # accepting terms
+  driver.accept_terms()
+   # When time arrives run! 
   driver.waitTime(RELEASING_TIME)
   # Select number and go basket
   driver.selectItem(shoe_size)
@@ -32,37 +34,37 @@ def getProduct(email, password, cvc, shoe_size, url):
 
 if __name__ == '__main__':
   cvc = "330"
-  password = "159753Caner."
-  password2 = "654321Ops"
-  # define multiprocessings
-  # try this
-  PRODUCT_URL_1 = "https://www.nike.com/tr/launch/t/womens-air-jordan-1-zoom-pink-glaze"
-  # multiprocessing.Process(target=getProduct, args=("caner.tasan@hotmail.com",password, cvc, "38",PRODUCT_URL_1)).start()
-  multiprocessing.Process(target=getProduct, args=("canertasan@sabanciuniv.edu",password, cvc, "38.5",PRODUCT_URL_1)).start()
-  multiprocessing.Process(target=getProduct, args=("gulerman36@hotmail.com",password, cvc, "38",PRODUCT_URL_1)).start()
-  multiprocessing.Process(target=getProduct, args=("kaansakarca123@hotmail.com",password2, cvc, "39",PRODUCT_URL_1)).start()
-  multiprocessing.Process(target=getProduct, args=("resellkc@hotmail.com",password2, cvc, "38",PRODUCT_URL_1)).start()
-  multiprocessing.Process(target=getProduct, args=("k.sakarca@gmail.com",password2, cvc, "39",PRODUCT_URL_1)).start()
-  multiprocessing.Process(target=getProduct, args=("huseyintasan37@gmail.com",password, cvc, "38.5",PRODUCT_URL_1)).start()
-  multiprocessing.Process(target=getProduct, args=("jalesakarca@hotmail.com",password2, cvc, "38.5",PRODUCT_URL_1)).start()
+  accounts = []
+  # Using readlines()
+  file1 = open('accounts.txt', 'r')
+  Lines = file1.readlines()
+  count = 0
+  # Strips the newline character
+  for line in Lines:
+    account = line.strip()
+    account = account.split(':')
+    accounts.append(account)
 
-  # PRODUCT_URL_2 = "https://www.nike.com/tr/launch/t/womens-dunk-low-disrupt-copa"
-  # multiprocessing.Process(target=getProduct, args=("caner.tasan@hotmail.com",password, cvc, "44",PRODUCT_URL_2)).start()
-  # multiprocessing.Process(target=getProduct, args=("canertasan@sabanciuniv.edu",password, cvc, "44.5",PRODUCT_URL_2)).start()
-  # multiprocessing.Process(target=getProduct, args=("gulerman36@hotmail.com",password, cvc, "45",PRODUCT_URL_2)).start()
-  # multiprocessing.Process(target=getProduct, args=("kaansakarca123@hotmail.com",password2, cvc, "40.5",PRODUCT_URL_2)).start()
-  # multiprocessing.Process(target=getProduct, args=("resellkc@hotmail.com",password2, cvc, "40.5",PRODUCT_URL_2)).start()
-  # multiprocessing.Process(target=getProduct, args=("k.sakarca@gmail.com",password2, cvc, "44",PRODUCT_URL_2)).start()
-  # multiprocessing.Process(target=getProduct, args=("huseyintasan37@gmail.com",password, cvc, "43",PRODUCT_URL_2)).start()
-  # multiprocessing.Process(target=getProduct, args=("jalesakarca@hotmail.com",password2, cvc, "44.5",PRODUCT_URL_2)).start()
+  proxies = []
+  file2 = open('proxies.txt', 'r')
+  Lines = file2.readlines()
+  count = 0
+  # Strips the newline character
+  for line in Lines:
+    proxy = line.strip()
+    proxy = proxy.split(':')
+    proxies.append(proxy)
 
-  # PRODUCT_URL_3 = "https://www.nike.com/tr/launch/t/womens-dunk-low-disrupt-copa"
-  # multiprocessing.Process(target=getProduct, args=("caner.tasan@hotmail.com",password, cvc, "44",PRODUCT_URL_3)).start()
-  # multiprocessing.Process(target=getProduct, args=("canertasan@sabanciuniv.edu",password, cvc, "44.5",PRODUCT_URL_3)).start()
-  # multiprocessing.Process(target=getProduct, args=("gulerman36@hotmail.com",password, cvc, "45",PRODUCT_URL_3)).start()
-  # multiprocessing.Process(target=getProduct, args=("kaansakarca123@hotmail.com",password2, cvc, "40.5",PRODUCT_URL_3)).start()
-  # multiprocessing.Process(target=getProduct, args=("resellkc@hotmail.com",password2, cvc, "40.5",PRODUCT_URL_3)).start()
-  # multiprocessing.Process(target=getProduct, args=("k.sakarca@gmail.com",password2, cvc, "44",PRODUCT_URL_3)).start()
-  # multiprocessing.Process(target=getProduct, args=("huseyintasan37@gmail.com",password, cvc, "43",PRODUCT_URL_3)).start()
-  # multiprocessing.Process(target=getProduct, args=("jalesakarca@hotmail.com",password2, cvc, "44.5",PRODUCT_URL_3)).start()
-
+  product_urls = ["https://www.nike.com/tr/launch/t/air-max-90-deep-royal-blue"]
+ 
+  sizes = [["38","38.5","39","38","38.5","39","38","38.5","38","38.5"],
+          ["38","38.5","39","38","38.5","39","38","38.5","38","38.5"]]
+  counter = 0
+  for index, url in enumerate(product_urls, start=0):
+    for account in accounts:
+      multiprocessing.Process(target=getProduct, args=(account[0],account[1],
+                            cvc, sizes[index][counter%len(sizes[index])],url, 
+                            proxies[counter%len(proxies)][0], proxies[counter%len(proxies)][1], 
+                            proxies[counter%len(proxies)][2], proxies[counter%len(proxies)][3], counter)).start()
+      counter += 1
+  
