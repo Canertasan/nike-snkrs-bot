@@ -10,7 +10,7 @@ This is an application which user can buy nike snkrs release sneakers.
 - This headless thing is a big problem. I have proxies which needs authentication is a problem in headless mode. I think seleniumwire extension will be enough but not sure on certificate (not secure) maybe nike does not allow me to buy it.
 
 # Observation
--Headless is must because if i enter 500 account my computer cannot open that much browser. It will explode.
+- Headless is must because if i enter 500 account my computer cannot open that much browser. It will explode.
 
 # Goals
 - proxy authentication on headless mode. (selenium wire work)
