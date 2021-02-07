@@ -1,85 +1,109 @@
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from datetime import datetime
+from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 import time
+import os
 import zipfile
 class WebDriver:
-  def __init__(self, proxy_host,proxy_port,proxy_username,proxy_pw,order):
+  def __init__(self, proxy_host,proxy_port,proxy_username,proxy_pw,order,url):
     options = Options()
     PROXY_HOST = proxy_host # rotating proxy
     PROXY_PORT = proxy_port
     PROXY_USER = proxy_username
     PROXY_PASS = proxy_pw
 
-
     manifest_json = """
     {
-        "version": "1.0.0",
-        "manifest_version": 2,
-        "name": "Chrome Proxy",
-        "permissions": [
-            "proxy",
-            "tabs",
-            "unlimitedStorage",
-            "storage",
-            "<all_urls>",
-            "webRequest",
-            "webRequestBlocking"
-        ],
-        "background": {
-            "scripts": ["background.js"]
-        },
-        "minimum_chrome_version":"22.0.0"
+      "name": "My Firefox Proxy",
+      "version": "1.0.0b",
+      "manifest_version": 2,
+      "permissions": [
+        "browsingData",
+        "proxy",
+        "storage",
+        "tabs",
+        "webRequest",
+        "webRequestBlocking",
+        "downloads",
+        "notifications",
+        "<all_urls>"
+      ],
+      "background": {
+        "scripts": ["background.js"]
+      },
+      "browser_specific_settings": {
+        "gecko": {
+          "id": "myproxy@example.org"
+        }
+      }
     }
     """
 
     background_js = """
+    var proxy_host = "YOUR_PROXY_HOST";
+    var proxy_port = YOUR_PROXY_PORT;
+
     var config = {
-            mode: "fixed_servers",
-            rules: {
-              singleProxy: {
-                scheme: "http",
-                host: "%s",
-                port: parseInt(%s)
-              },
-              bypassList: ["localhost"]
-            }
-          };
+        mode: "fixed_servers",
+        rules: {
+          singleProxy: {
+            scheme: "http",
+            host: proxy_host,
+            port: proxy_port
+          },
+          bypassList: []
+        }
+    };
 
-    chrome.proxy.settings.set({value: config, scope: "regular"}, function() {});
 
-    function callbackFn(details) {
+    function proxyRequest(request_data) {
         return {
-            authCredentials: {
-                username: "%s",
-                password: "%s"
-            }
+            type: "http",
+            host: %s, 
+            port: %s
         };
     }
 
-    chrome.webRequest.onAuthRequired.addListener(
-                callbackFn,
-                {urls: ["<all_urls>"]},
-                ['blocking']
+    browser.proxy.settings.set({value: config, scope: "regular"}, function() {;});
+
+    function callbackFn(details) {
+    return {
+        authCredentials: {
+            username: %s,
+            password: %s
+        }
+    };
+    }
+
+    browser.webRequest.onAuthRequired.addListener(
+            callbackFn,
+            {urls: ["<all_urls>"]},
+            ['blocking']
     );
+
+    browser.proxy.onRequest.addListener(proxyRequest, {urls: ["<all_urls>"]});
     """ % (PROXY_HOST, PROXY_PORT, PROXY_USER, PROXY_PASS)
 
-    pluginfile = 'proxy_auth_plugin_%s.zip' % order
+    pluginfile = 'proxy_auth_plugin_%s.xpi' % order
 
     with zipfile.ZipFile(pluginfile, 'w') as zp:
         zp.writestr("manifest.json", manifest_json)
         zp.writestr("background.js", background_js)
-    options.add_extension(pluginfile)
+ 
 
     # options.add_argument('--headless') # how to find element with headless and how to authenticate with headless to proxy
     # options.add_argument('--disable-gpu') # this is coming with headless
-    options.add_argument("disable-infobars")
-    self.chrome = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+    binary = FirefoxBinary('/Users/caner/.homebrew/Caskroom/firefox/85.0/Firefox.app/Contents/MacOS/firefox')
+    self.chrome = webdriver.Firefox(firefox_binary=binary,executable_path=GeckoDriverManager().install())
+    extension_path = os.getcwd() +"/"+ pluginfile  # Must be the full path to an XPI file!
+    self.chrome.install_addon(extension_path, temporary=True)
 
   def accept_terms(self):
     self.wait_until_visible(xpath="//button[@class='ncss-btn-primary-dark']",duration=30)
