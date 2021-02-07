@@ -5,81 +5,25 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from seleniumwire import webdriver
 from datetime import datetime
 import time
 import zipfile
 class WebDriver:
   def __init__(self, proxy_host,proxy_port,proxy_username,proxy_pw,order):
     options = Options()
-    PROXY_HOST = proxy_host # rotating proxy
-    PROXY_PORT = proxy_port
-    PROXY_USER = proxy_username
-    PROXY_PASS = proxy_pw
-
-
-    manifest_json = """
-    {
-        "version": "1.0.0",
-        "manifest_version": 2,
-        "name": "Chrome Proxy",
-        "permissions": [
-            "proxy",
-            "tabs",
-            "unlimitedStorage",
-            "storage",
-            "<all_urls>",
-            "webRequest",
-            "webRequestBlocking"
-        ],
-        "background": {
-            "scripts": ["background.js"]
-        },
-        "minimum_chrome_version":"22.0.0"
+    seleniumwire_options = {
+      'proxy': {
+          'http': 'http://%s:%s@%s:%s' % (proxy_username,proxy_pw,proxy_host,proxy_port), 
+          'https': 'https://%s:%s@%s:%s' % (proxy_username,proxy_pw,proxy_host,proxy_port),
+          'no_proxy': 'localhost,127.0.0.1' # excludes
+      }
     }
-    """
-
-    background_js = """
-    var config = {
-            mode: "fixed_servers",
-            rules: {
-              singleProxy: {
-                scheme: "http",
-                host: "%s",
-                port: parseInt(%s)
-              },
-              bypassList: ["localhost"]
-            }
-          };
-
-    chrome.proxy.settings.set({value: config, scope: "regular"}, function() {});
-
-    function callbackFn(details) {
-        return {
-            authCredentials: {
-                username: "%s",
-                password: "%s"
-            }
-        };
-    }
-
-    chrome.webRequest.onAuthRequired.addListener(
-                callbackFn,
-                {urls: ["<all_urls>"]},
-                ['blocking']
-    );
-    """ % (PROXY_HOST, PROXY_PORT, PROXY_USER, PROXY_PASS)
-
-    pluginfile = 'proxy_auth_plugin_%s.zip' % order
-
-    with zipfile.ZipFile(pluginfile, 'w') as zp:
-        zp.writestr("manifest.json", manifest_json)
-        zp.writestr("background.js", background_js)
-    options.add_extension(pluginfile)
 
     # options.add_argument('--headless') # how to find element with headless and how to authenticate with headless to proxy
     # options.add_argument('--disable-gpu') # this is coming with headless
     options.add_argument("disable-infobars")
-    self.chrome = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+    self.chrome = webdriver.Chrome(ChromeDriverManager().install(), options=options, seleniumwire_options=seleniumwire_options)
 
   def accept_terms(self):
     self.wait_until_visible(xpath="//button[@class='ncss-btn-primary-dark']",duration=30)
