@@ -20,8 +20,8 @@ class WebDriver:
       }
     }
 
-    # options.add_argument('--headless') # how to find element with headless and how to authenticate with headless to proxy
-    # options.add_argument('--disable-gpu') # this is coming with headless
+    options.add_argument('--headless') # how to find element with headless and how to authenticate with headless to proxy
+    options.add_argument('--disable-gpu') # this is coming with headless
     options.add_argument("disable-infobars")
     self.chrome = webdriver.Chrome(ChromeDriverManager().install(), options=options, seleniumwire_options=seleniumwire_options)
 
