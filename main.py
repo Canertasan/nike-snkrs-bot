@@ -30,13 +30,17 @@ def getProduct(email, password, cvc, shoe_size, url, proxy_host, proxy_port, pro
   # Payment
   driver.payments(cvc)
   print("You are in line!")
-  time.sleep(10000) # Don't close browser
+  driver.wait_pop_up()
+  # pop up showed up see win or loose
+  driver.win_or_loose()
+
 
 if __name__ == '__main__':
   cvc = "330"
   accounts = []
   # Using readlines()
   file1 = open('accounts.txt', 'r')
+  # file1 = open('failed_login_accounts.txt', 'r')
   Lines = file1.readlines()
   count = 0
   # Strips the newline character
@@ -55,9 +59,9 @@ if __name__ == '__main__':
     proxy = proxy.split(':')
     proxies.append(proxy)
 
-  product_urls = ["https://www.nike.com/tr/launch/t/air-max-90-deep-royal-blue"]
+  product_urls = ["https://www.nike.com/tr/launch/t/jordan-1-high-85-neutral-grey"]
  
-  sizes = [["38","38.5","39","38","38.5","39","38","38.5","38","38.5"],
+  sizes = [["41","42","43","44","45","44.5","40.5","43","42","44"],
           ["38","38.5","39","38","38.5","39","38","38.5","38","38.5"]]
   counter = 0
   for index, url in enumerate(product_urls, start=0):
