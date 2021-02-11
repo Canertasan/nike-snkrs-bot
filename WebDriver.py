@@ -8,8 +8,10 @@ from selenium.webdriver.common.by import By
 from datetime import datetime
 import time
 import zipfile
-class WebDriver:
-  def __init__(self, proxy_host,proxy_port,proxy_username,proxy_pw,order):
+from tkinter import *
+
+class WebDriver(Frame):
+  def __init__(self, proxy_host, proxy_port, proxy_username, proxy_pw, order):
     options = Options()
     self.proxy = proxy_host
     PROXY_HOST = proxy_host # rotating proxy
@@ -84,15 +86,19 @@ class WebDriver:
 
   def accept_terms(self):
     try:
+      # self.result_label["text"] = "Trying to accepting Terms"
+      print("accepting terms")
       self.wait_until_visible(xpath="//button[@class='ncss-btn-primary-dark']",duration=30)
       accept_button = self.chrome.find_element_by_xpath("//button[@class='ncss-btn-primary-dark']")
       accept_button.click()
     except TimeoutException:
+      # self.result_label["text"] = "Terms didnt asked"
       print("Does not ask for terms")
 
   def openBrowser(self, url):
     try:
-      print("Requesting page: " + url)
+      # self.result_label["text"] = "Opening browser"
+      print("Opening browser")
       self.chrome.get(url)
     except TimeoutException:
       print("Page load timed out but continuing anyway")
@@ -123,6 +129,10 @@ class WebDriver:
 
   def login(self, username, password):
     try:
+      #login first
+      self.wait_until_visible(xpath="//button[@class='join-log-in text-color-grey prl3-sm pt2-sm pb2-sm fs12-sm d-sm-b']")
+      self.chrome.find_element_by_xpath("//button[@class='join-log-in text-color-grey prl3-sm pt2-sm pb2-sm fs12-sm d-sm-b']").click()
+
       print("Waiting for login fields to become visible")
       self.wait_until_visible(xpath="//input[@name='emailAddress']")
 
@@ -130,6 +140,7 @@ class WebDriver:
       email_input = self.chrome.find_element_by_xpath("//input[@name='emailAddress']")
       email_input.clear()
       email_input.send_keys(username)
+      time.sleep(2)
       password_input = self.chrome.find_element_by_xpath("//input[@name='password']")
       password_input.clear()
       password_input.send_keys(password)
