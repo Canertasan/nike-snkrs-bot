@@ -10,7 +10,7 @@ import time
 from datetime import datetime
 from WebDriver import WebDriver 
 import multiprocessing
-from tkinter import *
+import threading
 
 # Product Info
 RELEASING_TIME = 14
@@ -20,28 +20,26 @@ def getProduct(email, password, cvc, shoe_size, url, proxy_host, proxy_port, pro
   driver = WebDriver(proxy_host, proxy_port ,proxy_username, proxy_password, order)
   # Get product page
   driver.openBrowser(url)
-  # accepting terms
+  # accepting termss
   driver.accept_terms()
-  #login first
-  driver.login(email, password)
-   # When time arrives run! 
-  driver.waitTime(RELEASING_TIME)
-  # Select number and go basket
-  driver.selectItem(shoe_size)
-  # Payment
-  driver.payments(cvc)
-  print("You are in line!")
-  driver.wait_pop_up()
-  # pop up showed up see win or loose
-  driver.win_or_loose()
+  # login first
+  res_login = driver.login(email, password, cvc)
+  # res_login = True
+  if res_login == True:
+    # When time arrives run! 
+    driver.waitTime(RELEASING_TIME)
+    # Select number and go basket
+    res_select_item = driver.selectItem(shoe_size, email, password, cvc)
+    if res_select_item == True:
+      # Payment
+      driver.payments(cvc, shoe_size, email)
+      print("You are in line!")
+      driver.wait_pop_up()
+      # pop up showed up see win or loose
+      driver.win_or_loose()
 
 
 if __name__ == '__main__':
-  # window=Tk()
-  # window.title('Snkrs Bot')
-  # window.geometry("800x500+10+10")
-  
-  cvc = "330"
   accounts = []
   # Using readlines()
   file1 = open('accounts.txt', 'r')
@@ -50,11 +48,13 @@ if __name__ == '__main__':
   count = 0
   # Strips the newline character
   for line in Lines:
-    account = line.strip()
-    account = account.split(':')
-    accounts.append(account)
+    if line != "":
+      account = line.strip()
+      account = account.split(':')
+      accounts.append(account)
+      count += 1
 
-  file3 = open('failed_login_accounts.txt', 'a')
+  file3 = open('failed_login_accounts.txt', 'w')
   file3.write("")
   file3.close()
 
@@ -68,21 +68,18 @@ if __name__ == '__main__':
     proxy = proxy.split(':')
     proxies.append(proxy)
 
-  product_urls = ["https://www.nike.com/tr/launch/t/womens-air-jordan-1-silver-toe"]
+  product_urls = ["https://www.nike.com/tr/launch/t/dunk-high-ambush-cosmic-fuchsia"]
  
-  sizes = [["38","38.5","39","38","38.5","39","38","38.5","38","38.5"],
+  sizes = [["38","38.5","39", "40","38","38.5","39", "40","38","38.5","39", "40","38","38.5","39", "40","38","38.5","39", "40","38","38.5","39", "40","38","38.5","39", "40","38","38.5","39", "40", "38", "38", "38", "38", "38", "38", "38", "38", "38", "38", "38", "38", "38", "38", "38", "38", "38.5","39","40","40.5","43","44","44.5","38","38.5","38","38.5","39","40","40.5","43","44","44.5","38","38.5","38","38.5","39","40","40.5","43","44","44.5","38","38.5","38","38.5","39","40","40.5","43","44","44.5","38","38.5"],
             ["41","42","43","44","45","44.5","40.5","43","42","44"]]
+  #change here for bad proxies
   counter = 0
   for index, url in enumerate(product_urls, start=0):
     for account in accounts:
-      # email=Label(window, text=str(counter) + ". " + account[0], fg='black', font=("Helvetica", 14))
-      # email.place(x=10, y=(10 + counter*10))
-      # result=Label(window, text="Status: " + "starting...", fg='black', font=("Helvetica", 14))
-      # result.place(x=250, y=(10 + counter*10))
-      multiprocessing.Process(target=getProduct, args=(account[0],account[1],
-                            cvc, sizes[index][counter%len(sizes[index])],url, 
+      threading.Thread(target=getProduct, args=(account[0],account[1],
+                            account[2], sizes[index][counter%len(sizes[index])],url, 
                             proxies[counter%len(proxies)][0], proxies[counter%len(proxies)][1], 
                             proxies[counter%len(proxies)][2], proxies[counter%len(proxies)][3], counter)).start()
       counter += 1
-  # window.mainloop()
-  
+      # if counter >= 10:
+      #   break
