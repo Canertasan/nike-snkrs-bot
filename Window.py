@@ -343,7 +343,6 @@ class Window:
     counter = 0
     # Strips the newline character
     for line in Lines:
-      index = counter
       account = line.strip()
       account = account.split(':')
       accounts.append(account)
@@ -353,7 +352,8 @@ class Window:
       result=Label(self.window, text="Status: " + "starting...", fg='black', font=("Helvetica", 12))
       result.place(x=250, y=(10 + counter*30))
       self.result_labels.append(result)
-      reset_btn=Button(self.window, text=str(counter) + ". " + "Reset", fg='black', command =lambda :  self.restart_browser(index))
+      reset_btn=Button(self.window, text=str(counter) + ". " + "Reset", fg='black')
+      reset_btn.configure(command = lambda button=reset_btn :  self.restart_browser(button))
       reset_btn.place(x=600, y=(10 + counter*30))
       self.reset_buttons.append(reset_btn)
       counter+=1
@@ -366,9 +366,9 @@ class Window:
       proxy = proxy.split(':')
       self.all_proxies_infos.append(proxy)
 
-    product_urls = ["https://www.nike.com/tr/launch/t/womens-lahar-low-wheat"]
+    product_urls = ["https://www.nike.com/tr/launch/t/air-jordan-1-university-blue"]
   
-    sizes = [["40.5", "38", "38", "38", "38", "38", "38", "38", "38", "38", "38", "38", "38", "38", "38", "38", "38", "38", "38.5","39","40","40.5","43","44","44.5","38","38.5","38","38.5","39","40","40.5","43","44","44.5","38","38.5","38","38.5","39","40","40.5","43","44","44.5","38","38.5","38","38.5","39","40","40.5","43","44","44.5","38","38.5"],
+    sizes = [["40","41","43","44","44.5","45","40","41","43","44","44.5","45","40","41","43","44","44.5","45","40","41","43","44","44.5","45","40","41","43","44","44.5","45","40","41","43","44","44.5","45","40","41","43","44","44.5","45"],
             ["41","42","43","44","45","44.5","40.5","43","42","44"]]
     counter = 0
     global COUNTER
@@ -383,11 +383,13 @@ class Window:
         p.start()
         counter += 1
         COUNTER += 1
-        break
+        if counter >= 3:
+          break
 
-  def restart_browser(self, index):
+  def restart_browser(self, button):
     global COUNTER
     print("COUNTER:", COUNTER)
+    index = self.reset_buttons.index(button)
     self.set_result_label_text(index, "Resetting...")
     p = threading.Thread(target=self.getProduct, args=(self.process_infos[index][0],self.process_infos[index][1], self.process_infos[index][2], self.process_infos[index][3],
                               self.process_infos[index][4], 
