@@ -218,16 +218,18 @@ class WebDriver:
       print("Shoe number selected:", shoe_size, "email:", email)
       return True
     except TimeoutException:
-      window.set_result_label_text(order, "Numbers cannot loaded yet. Try with new proxy")
-      print("Numbers cannot loaded yet. Try with new proxy")
-      file1 = open('failed_login_accounts.txt', 'a')
-      file1.write(email + ":" + password + ":" + cvc +  "\n")
-      file1.close()
-      file2 = open('failed_proxy.txt', 'a')
-      file2.write(self.proxy + "\n")
-      file2.close()
-      self.chrome.close()
-      return False
+      window.set_result_label_text(order, "Numbers cannot loaded yet. refreshing page")
+      print("Numbers cannot loaded yet. Refreshing page")
+      self.chrome.refresh()
+      self.selectItem(shoe_size, email, password, cvc, order)
+      # file1 = open('failed_login_accounts.txt', 'a')
+      # file1.write(email + ":" + password + ":" + cvc +  "\n")
+      # file1.close()
+      # file2 = open('failed_proxy.txt', 'a')
+      # file2.write(self.proxy + "\n")
+      # file2.close()
+      # self.chrome.close()
+      # return False
     except:
       print("Unexpected error on SELECT ITEM:", sys.exc_info()[0])
       return False
